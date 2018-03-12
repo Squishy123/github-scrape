@@ -1,0 +1,16 @@
+{
+  "name": "github-scrape",
+  "version": "1.0.0",
+  "description": "Scrapes github using puppeteer",
+  "main": "github-scrape.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node github-scrape.js"
+  },
+  "author": "Squishy456",
+  "license": "ISC",
+  "dependencies": {
+    "npm": "^5.7.1",
+    "puppeteer": "^1.1.1"
+  }
+}
