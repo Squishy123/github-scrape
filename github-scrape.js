@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const mongoose = require('mongoose');
+const jsonfile = require('jsonfile');
 const User = require('./models/user')
 
 //login fields
@@ -14,6 +15,9 @@ const NUM_USERS_SELECTOR = '#js-pjax-container > div > div.columns > div.column.
 const CREDS = require('./creds');
 
 let browser, page, pageURL, searchURL;
+
+//write to json
+let file = 'data.json';
 
 async function init() {
     browser = await puppeteer.launch({
@@ -62,6 +66,7 @@ async function getNumPages() {
 }
 
 async function getEmailData() {
+    let data = [];
     let numPages = await getNumPages();
     console.log('Number of Pages: ', numPages);
 
@@ -94,6 +99,7 @@ async function getEmailData() {
             if (!email) continue;
 
             console.log(username, '->', email);
+            data.push({ username: username, email: email, date: new Date() });
             upsertUser({ username: username, email: email, date: new Date() });
         }
 
@@ -104,8 +110,11 @@ async function getEmailData() {
                 if (element.innerHTML == "Whoa there!") return true;
         }, 'body > div > h1');
 
-        if(maxed) p = numPages;
+        if (maxed) p = numPages;
     }
+    jsonfile.writeFile(file, data, function (err) {
+        console.error(err);
+    });
 }
 
 function upsertUser(userObj) {
